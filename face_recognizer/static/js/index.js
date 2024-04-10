@@ -22,3 +22,36 @@ const toggler = function (e) {
 };
 menu.addEventListener("click", toggler.bind(".bx"));
 navLink.addEventListener('click', toggler.bind(".nav-link"));
+
+
+const sections = document.querySelectorAll('.intersect');
+// const header_nav = document.querySelector('ul.nav');
+const callback = function (entries, observer) {
+    const [entry] = entries;
+    // if (entry.target.closest('ul.nav')) {
+    //     entry.target.classList.toggle("intersecting");
+    //     [...entry.target.children].forEach((child, index) => {
+    //         const closestNavItem = child.closest('.nav-item');
+    //         const itera = closestNavItem && !closestNavItem.classList.contains('nav') ? index : 0;
+    //         setTimeout(function () {
+    //             closestNavItem.classList.toggle('nav');
+    //         }
+    //             , 400 * itera)
+    //     });
+    //     return;
+    // };
+    if (!entry.isIntersecting) return;
+    entry.target.classList.remove("intersecting");
+    observer.unobserve(entry.target);
+}
+const options = {
+    root: null,
+    rootMargin: "-20px",
+    threshold: 0.3,
+};
+
+const observer = new IntersectionObserver(callback, options);
+sections.forEach(section => {
+    observer.observe(section);
+})
+// observer.observe(header_nav);

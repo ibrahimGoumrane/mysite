@@ -33,8 +33,10 @@
   height: auto;
   position: relative;
   z-index: 2001;
+  transform: translateX(0);
   box-shadow: 0px -30px 27px 6px rgba(0, 0, 0, 0.88);
   -webkit-box-shadow: 0px -30px 27px 6px rgba(0, 0, 0, 0.88);
+  transition: var(--transition-effect) !important;
   -moz-box-shadow: 0px -30px 27px 6px rgba(0, 0, 0, 0.88);
 }
 
@@ -47,8 +49,16 @@
   box-shadow: 0px -30px 27px 6px rgba(0, 0, 0, 0.88);
   -webkit-box-shadow: 0px -30px 27px 6px rgba(0, 0, 0, 0.88);
   -moz-box-shadow: 0px -30px 27px 6px rgba(0, 0, 0, 0.88);
+  transition: var(--transition-effect) !important;
+  transform: translateX(0);
+}
+.intersecting {
+  position: relative !important;
+  opacity: 0 !important;
+  transform: translateY(100px) !important;
 }
 .s3 {
+  transition: var(--transition-effect) !important;
   height: 60vh;
   background: var(--black-color);
   position: relative;
@@ -56,6 +66,7 @@
   box-shadow: -1px -56px 36px 28px rgba(0, 0, 0, 0.77);
   -webkit-box-shadow: -1px -56px 36px 28px rgba(0, 0, 0, 0.77);
   -moz-box-shadow: -1px -56px 36px 28px rgba(0, 0, 0, 0.77);
+  transform: translateX(0);
 }
 .s3 form {
   display: grid;
@@ -365,6 +376,7 @@ img {
   .s1,
   .s2 {
     box-shadow: none;
+    padding: 20px;
   }
 }
 .menu {

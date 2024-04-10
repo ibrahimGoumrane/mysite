@@ -51,6 +51,9 @@
   padding: 20px;
   z-index: 2001;
   position: relative;
+  transition: all;
+  transition-duration: 0.4s;
+  transition-timing-function: ease-in-out;
 }
 .header .menu {
   display: none;
@@ -89,6 +92,19 @@
   transition: var(--transition-effect);
   opacity: 0;
   transform: translateX(50px);
+}
+
+.nav-item {
+  position: relative;
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: all;
+  transition-duration: 0.3s;
+  transition-timing-function: linear;
+}
+.nav {
+  opacity: 1;
+  transform: translateX(0px);
 }
 .header ul li i {
   font-size: var(--font-small-size);

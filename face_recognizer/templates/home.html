@@ -2,7 +2,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
 {% endblock %}{% block title %} face_recognizer {% endblock %} {% block main %}
 <img src="{% static 'img/face_recognition.png' %}" alt="" />
-<section class="s1 sticky">
+<section class="s1 intersect intersecting">
   <div class="section home" id="home">
     <div>
       <p>
@@ -20,9 +20,9 @@
     </div>
   </div>
 </section>
-<section class="s2 sticky">
+<section class="s2 intersect intersecting" id="ensam">
   <h1>Ensam Casa :</h1>
-  <div class="ensam" id="ensam">
+  <div class="ensam">
     <h2>Presentation :</h2>
     <h2>L'École Nationale Supérieure des Arts et Métiers</h2>
     <div class="presentation section">
@@ -56,7 +56,7 @@
     </div>
   </div>
 </section>
-<section class="s3 sticky" id="contact">
+<section class="s3 intersect intersecting" id="contact">
   <h1>Contact Us:</h1>
   <form action="{% url 'mysite:home' %}" method="post">
     {% csrf_token %} {{ form.as_div }}
