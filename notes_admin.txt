@@ -1,0 +1,5 @@
+admin_name :admin
+admin_password :admin
+admin_mail :admin@gmail.com
+user :
+admin admin

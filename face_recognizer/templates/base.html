@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <!-- {% load static %} -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block css %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/header_footer.css' %}" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@1,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body>
+    <!-- headers  -->
+    <div class="menu">
+      <i class="bx bx-x none"></i>
+      <i class="bx bx-menu-alt-left"></i>
+    </div>
+    <div class="background">
+      <img src="{% static 'img/newImage.png' %}" alt="" />
+    </div>
+    <header class="header">
+      <div class="img row">
+        <a href="#" class="">
+          <img
+            src="{% static 'img/ensamLogo.png' %}"
+            class="img-fluid"
+            alt=""
+          />
+        </a>
+      </div>
+      <div class="row">
+        <nav class="main-navigation">
+          <ul style="list-style: none" class="nav">
+            <li class="nav-item">
+              <i class="bx bxs-home"></i
+              ><a href="#home" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item">
+              <i class="bx bxs-school"></i
+              ><a href="#ensam" class="nav-link">Ensam casa</a>
+            </li>
+            <li class="nav-item">
+              <i class="bx bxs-conversation"></i
+              ><a href="#contact" class="nav-link">Contact</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="login row">
+        <button class="login button-17 nav-link" role="button">Login</button>
+      </div>
+    </header>
+    {% block main%} {% endblock %}
+    <footer class="footer">
+      <div class="footer-content">
+        <i class="bx bx-copyright"></i>
+        <span>Copyright 2024</span>
+        <span>All rights reserved</span>
+      </div>
+    </footer>
+    <script src="{% static 'js/index.js'%}"></script>
+  </body>
+</html>
