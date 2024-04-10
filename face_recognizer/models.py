@@ -96,8 +96,62 @@ class Presence(models.Model):
 
 
 class Contact(models.Model):
-    name = models.CharField(db_column="name" ,max_length=256 , null=True)
-    firstName = models.CharField(db_column="firstName" ,max_length=256  , null=True)
-    email =models.EmailField(max_length=150)
+    name = models.CharField(db_column="name", max_length=256, null=True)
+    firstName = models.CharField(db_column="firstName", max_length=256, null=True)
+    email = models.EmailField(max_length=150)
     subject = models.TextField()
     description = models.TextField()
+
+    class Meta:
+        db_table = 'contact'
+
+    def __str__(self):
+        return f'Name: {self.name}, Email: {self.email}, Subject: {self.subject}'
+class FaceRecognizer(models.Model):
+    student_class = models.ForeignKey(Class, on_delete=models.CASCADE, db_column='class_id', null=True)
+    binary_steam = models.BinaryField()
+    class Meta:
+        db_table = 'face_recognizer'
+    def __str__(self):
+        return f'Student Class: {self.student_class}'
+
+
+# Define upload_location function here
+
+cycle = [
+    ('prepa', 'preparatory cycle'),
+    ('engineer', 'engineering cycle'),
+]
+
+cycle_year = {
+    'prep_years': [
+        ('1', '1 year '),
+        ('2', '2 years'),
+    ],
+    'engineer_years': [
+        ('1', '1 year '),
+        ('2', '2 years'),
+        ('3', '3 years'),
+    ]
+}
+
+filiere = [
+    ('GM', 'genie mecanique'),
+    ('GEM', 'genie electromecanique'),
+    ('IAGI', 'genie informatique'),
+    ('GI', 'genie indistruelle'),
+    ('MSEI', 'genie electrique'),
+]
+
+def upload_location(instance, filename):
+    # Customize the upload location here
+    return f'uploads/{instance.cycle}/{instance.cycle_prepa}/{filename}'
+
+class UtilsData(models.Model):
+    module_name = models.CharField(max_length=400)
+    cycle = models.CharField(max_length=80, choices=cycle)  # Choices for cycle
+    cycle_prepa = models.CharField(max_length=80, choices=cycle_year['prep_years'], blank=True, null=True)
+    cycle_eng = models.CharField(max_length=80, choices=cycle_year['engineer_years'], blank=True, null=True)
+    filiere = models.CharField(max_length=80, choices=filiere , blank=True, null=True)
+    image = models.FileField(upload_to=upload_location)  # Change this according to your needs
+    created_at = models.DateTimeField(auto_now_add=True)

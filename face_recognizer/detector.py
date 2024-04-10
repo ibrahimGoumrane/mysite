@@ -114,6 +114,6 @@ face_handler = FaceRecognitionHandler()
 # Uncomment and use one of the paths for testing
 # training_path = Path("validation/ben_afflek_1.jpg")
 # training_path = Path("validation/ben_afflek_2.jpg")
-training_path = Path("./validation/img4.jpeg")
+# training_path = Path("./validation/img4.jpeg")
 # face_handler.encode_known_faces()
-face_handler.recognize_faces(training_path.absolute())
+# face_handler.recognize_faces(training_path.absolute())
