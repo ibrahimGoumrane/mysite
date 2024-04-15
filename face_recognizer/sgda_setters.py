@@ -28,7 +28,7 @@ class DataBaseSetters:
         except Exception as e:
             print(f"An error occurred during class initialization: {e}")
 
-    def set_seance_data(self, class_id: int, module_id: int, date: datetime = datetime.now()) -> None:
+    def set_seance_data(self, class_id: int, module_id: int, date: datetime = datetime.now()) -> Seance:
         Date_info=utils.set_current_time(date)
         try:
             seance_class = Class.objects.get(pk=class_id)
@@ -43,6 +43,7 @@ class DataBaseSetters:
             )
             newSeance.save()
             print("Seance data inserted successfully.")
+            return newSeance
         except Exception as e:
             print(f"An error occurred during seance initialization: {e}")
 
@@ -63,3 +64,5 @@ class DataBaseSetters:
             print("Student state inserted successfully.")
         except Exception as e:
             print(f"An error occurred: {e}")
+
+data_base_setters =DataBaseSetters()

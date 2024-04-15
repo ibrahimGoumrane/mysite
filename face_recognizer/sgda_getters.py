@@ -4,10 +4,62 @@ from face_recognizer.models import Class, Teachers, Students, Module, Seance, Pr
 from typing import Dict, List
 
 class Data_Base_extracters:
-    def get_student_id(self,name:str) -> int :
-        Student = Students.objects.get(student_name =name)
-        return Student.pk
-    def get_students_class(self, student_id: int) -> int:
+    def get_student(self,name:str ,s_class:Class) -> Students :
+        try :
+            Student = Students.objects.get(
+                student_name =name ,
+                student_class=s_class)
+            return Student
+        except Students.DoesNotExist :
+            raise Exception('the students you are looking for dont exist')
+    def get_class(self, cycle:str,cycle_year:int,filiere:str)->Class:
+        try:
+            class_obj=Class.objects.get(
+                cycle=cycle,
+                cycle_year=int(cycle_year),
+                filiere=filiere,
+            )
+            return class_obj
+        except Class.DoesNotExist:
+            raise Exception('Class entrer n\'existe pas dans la base de donner')
+    def get_module(self , class_id:int,module_name:str)-> Module :
+        try:
+            class_obj=Class.objects.get(pk=class_id)
+            module_obj=Module.objects.get(
+                student_class = class_obj,
+                module_name = module_name,
+            )
+            return module_obj
+        except Module.DoesNotExist:
+            raise Exception('Module entrer n\'existe pas dans la base de donner')
+    def get_class_modules(self,class_id:int):
+        try :    
+            class_obj=Class.objects.get(
+                class_id=class_id
+
+            )
+            modules = Module.objects.filter(
+                student_class=class_obj
+            )
+            return list(modules)
+        except Class.DoesNotExist :
+                raise Exception('Class entrer n\'existe pas dans la base de donner')  
+        except Module.DoesNotExist :
+                raise Exception('Class entrer ne contient aucun module')              
+    def get_class_students(self, class_id: int) -> list[Students]:
+        try:
+        # Query the class model to retrieve the student
+            class_obj = Class.objects.get(pk=class_id)
+
+            # Access the student's class using the foreign key relationship
+            students = class_obj.class_students.all()
+            # Return the students object in a class 
+            return list(students)
+        except Students.DoesNotExist:
+            return Exception('the class contain no students at all.')
+        except Class.DoesNotExist:
+            return Exception('there is no such class')    
+    def get_student_class(self, student_id: int) -> int:
         try:
         # Query the Students model to retrieve the student
             student = Students.objects.get(pk=student_id)
@@ -19,7 +71,8 @@ class Data_Base_extracters:
             return student_class.class_id
         except Students.DoesNotExist:
             return None
-
+        except Class.DoesNotExist:
+            return None
     def get_seance(self, class_id: int, date: datetime = datetime.now()) -> int:
         Date_info = utils.set_current_time(date)
         try:
@@ -72,3 +125,4 @@ class Data_Base_extracters:
             return None       
         except Class.DoesNotExist:
             return None
+data_base_getters =Data_Base_extracters()        

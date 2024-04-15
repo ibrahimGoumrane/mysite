@@ -1,5 +1,17 @@
+sqlserver :
+the root account :
+login:root
+pass:admin
+the admin acccount :
+login:admin
+pass:admin
+
 admin_name :admin
 admin_password :admin
 admin_mail :admin@gmail.com
 user :
 admin admin
+
+LES DONNEE sont enregistrer de la maniere suivante dans la db :
+cycle_preparatoire - 1 2  - A_E
+cycle_ingenieur- 1 2 3 - IAGI_MSEI_GSI_GM_GE

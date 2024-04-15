@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from django.http import HttpResponse,HttpRequest,HttpResponsePermanentRedirect,HttpResponseNotFound,HttpResponseRedirect
+from django.http import JsonResponse,HttpResponse,HttpRequest,HttpResponsePermanentRedirect,HttpResponseNotFound,HttpResponseRedirect,HttpResponseServerError
 from pathlib import Path
-
+from .sgda_setters import data_base_setters
+from .sgda_getters import data_base_getters
 from .forms import ContactForm ,SeanceData
-from .models import Contact  ,UtilsData ,upload_location
-from .detector import face_handler 
-
-
+from .models import Contact  ,UtilsData 
+from .utils import utils
+from json import dumps ,loads
 # Create your views here.
 
 
@@ -33,36 +33,132 @@ def home(request :HttpRequest)->HttpResponse:
             # Redirect to a new URL after successful form submission
             return HttpResponseRedirect('/thankyou/')
     return render(request, 'home.html',{'form':form})
+def class_modules(request:HttpRequest)->JsonResponse:
+    try :
+        if request.method=='POST':
+            # Parse the JSON data from the request body
+            json_data = loads(request.body)
+            
+            # Access the values from the JSON data
+            cycle = json_data.get('cycle')
+            cycle_year = json_data.get('cycleYear')
+            cycle_filiere = json_data.get('cycleFiliere')
+            #creating the class object using that data
+            class_obj=data_base_getters.get_class(cycle=cycle,
+                                                  cycle_year=cycle_year
+                                                  ,filiere=cycle_filiere)
+            #using the class obj in ordre to retreive the modules
+            modules = data_base_getters.get_class_modules(
+                class_id=class_obj.pk
+            )
+            sended_modules=[]
+            
+            for module in modules:
+                sended_modules.append(module.module_name) 
+                
+            ###return the json reponse 
+            print(sended_modules)
+            return JsonResponse({
+                'modules' : sended_modules,
+            })
+        else :
+            raise Exception('the request is not Post')
+    except Exception as e :
+        stri = str(e)
+        print('en error occured :' ,stri)
+        return JsonResponse({'en error occured ' :stri},status=500) 
 def face_recognizer(request: HttpRequest) -> HttpResponse:
     form = SeanceData()
     if request.method == 'POST':
-        # print(request.POST,request.FILES)
         form = SeanceData(request.POST,request.FILES)
-        print(form.errors) 
+        module_name = request.POST['module_name']
         if form.is_valid():
-            # Extract cleaned data from the form
-            module_name = form.cleaned_data['module_name']
-            cycle = form.cleaned_data['cycle']
-            cycle_prepa = form.cleaned_data['cycle_prepa'] 
-            cycle_eng =form.cleaned_data['cycle_eng']
-            filiere = form.cleaned_data['filiere']
-            image = form.cleaned_data['image']
-            # Create an instance of the Seance model
-            seance_data=UtilsData.objects.create(
-                module_name=module_name,
-                cycle=cycle,
-                cycle_eng=cycle_eng,
-                cycle_prepa=cycle_prepa,
-                filiere=filiere,
-                image=image
-            )
-            img_path=Path('media').joinpath(Path(upload_location(seance_data,image)))
-            print(img_path.absolute)
-            face_handler.recognize_faces(img_path.absolute())
+            try :
+                #contain all the data inputed from the user
+                seance_data:UtilsData=utils.utilsdata_init(module_name , form)
+                ###### get the year , filiere or section and cycle 
+                year=1
+                filiere=''
+                if seance_data.cycle == 'cycle_ingenieur':
+                    filiere = seance_data.filiere.lower()
+                    year = seance_data.cycle_eng  
+                else :
+                    year=seance_data.cycle_prepa
+                    filiere =seance_data.section.lower()
+                year=int(year)
 
-            # Redirect to a new URL after successful form submission
-            return HttpResponseRedirect('/thankyou/')
+                ####### get the class , module and students 
+                class_obj =data_base_getters.get_class(seance_data.cycle,year,filiere)
+                module_obj=data_base_getters.get_module(class_obj.pk,seance_data.module_name)
+                
+                present_student:list[str]=[]
 
-    return render(request, 'face_recognizer.html', {'form': form})
+
+                #return a list of present student
+                if type(seance_data.image) ==list :
+                    for img in seance_data.image:
+                        for ele in utils.recognize_faces_present_seance(seance_data,img):
+                            present_student.append(ele)
+                else :
+                    for ele in utils.recognize_faces_present_seance(seance_data,seance_data.image):
+                        present_student.append(ele)
+                #students name are separated by underscores in the db and the encodings
+                students_class=data_base_getters.get_class_students(class_obj.pk)
+                
+
+                ###########seance init
+                seance_init=data_base_setters.set_seance_data(class_obj.pk ,module_obj.pk ,seance_data.created_at )
+                
+                present_student_obj=[]
+                absence_student_obj=[]    
+                
+                ######## getting the modules of class
+
+
+
+
+                #########setting the absence and presence of students
+                for student in students_class :
+                    if student.student_name in present_student :
+                        present_student_obj.append(student)
+                        data_base_setters.set_student_state(
+                            student_id =student.pk,
+                            seance_id=seance_init.pk,
+                            state= True, 
+                        ) 
+                    else :
+                        absence_student_obj.append(student)
+                        # absence_student.append(' '.join(student.student_name.split('_')))
+                        data_base_setters.set_student_state(
+                            student_id =student.pk,
+                            seance_id=seance_init.pk,
+                            state= False, 
+                        )  
+                form = SeanceData()
+                json_object={
+                    'form': form,
+                    'response_data':False,
+                    'module_name':module_obj.module_name,
+                    'seance_id':seance_init.seance_id,
+                    'teacher':module_obj.teacher.teacher_name,
+                    'present_student':present_student_obj,
+                    'absent_student':absence_student_obj,
+                    'start_hour':seance_init.start_hour,
+                    'end_hour':seance_init.end_hour,
+                }
+                # Redirect to a new URL after successful form submission
+                return render(request ,'face_recognizer.html',json_object)
+                # return JsonResponse(json_object)
+            except Exception as e :
+                stri = str(e)
+                print('en error occured :' ,stri)
+                return HttpResponseServerError(f'the server cannot respond now internal server error has occured {stri}')
+                # return JsonResponse({'en error occured ' :stri},status=500)
+    return render(request, 'face_recognizer.html', {'form': form, 'response_data':False})
+    # return render(request, 'face_recognizer.html', {'form': form})
+
+def result_submission(request):
+    pass
+
 def student_info(request , student_id):
     return render(request, 'student_info.html')

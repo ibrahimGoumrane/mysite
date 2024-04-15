@@ -22,32 +22,25 @@ class ContactForm(forms.ModelForm):
 class SeanceData(forms.ModelForm):
     class Meta:
         model = UtilsData
-        fields = ['module_name', 'cycle', 'cycle_prepa', 'cycle_eng', 'filiere','image']
+        fields = ['cycle', 'cycle_prepa', 'cycle_eng', 'filiere','section','image']
         widgets = {
-            'module_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'cycle': forms.Select(attrs={'class': 'form-control'}),
-            'cycle_prepa': forms.Select(attrs={'class': 'form-control'}),
-            'cycle_eng': forms.Select(attrs={'class': 'form-control'}),
-            'filiere': forms.Select(attrs={'class': 'form-control'}),
-            'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'cycle': forms.Select(attrs={'class': 'sec form-control','id':'cycle'}),
+            'cycle_prepa': forms.Select(attrs={'class': 'sec form-control','id':'cycle_prep'}),
+            'cycle_eng': forms.Select(attrs={'class': 'sec form-control','id':'cycle_eng'}),
+            'section': forms.Select(attrs={'class': 'sec form-control','id':'cycle_sec'}),
+            'filiere': forms.Select(attrs={'class': 'sec form-control','id':'cycle_fil'}),
+            'image': forms.FileInput(attrs={'class': 'form-control' ,'id':'file-input'}),
         }
-
     def __init__(self, *args, **kwargs):
         super(SeanceData, self).__init__(*args, **kwargs)
         self.fields['cycle_prepa'].required = False
         self.fields['cycle_eng'].required = False
         self.fields['filiere'].required = False
-    #     for field in self.fields:
-    #         self.fields[field].label = False
-            # self.fields[field].widget.attrs['class'] = 'form-control'
-            # self.fields[field].widget.attrs['placeholder'] = field
+        self.fields['section'].required = False
+        self.fields['cycle_prepa'].initial = ''
+        self.fields['cycle_eng'].initial = ''
+        self.fields['filiere'].initial = ''
+        self.fields['section'].initial = ''
+        self.fields['cycle'].initial = ''
 
-        # Dynamic population of choices for filiere field based on cycle selection
-        # if 'cycle' in self.data:
-
-        #     cycle = self.data.get('cycle')
-        #     if cycle == 'prepa':
-        #         self.fields['filiere'].choices =cycle_year['prep_years']
-        #     elif cycle == 'engineer':
-        #         self.fields['filiere'].choices =cycle_year['engineer_years']
 
