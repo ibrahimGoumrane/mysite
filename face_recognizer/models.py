@@ -34,10 +34,13 @@ class Teachers(models.Model):
     teacher_name = models.TextField()
 
     class Meta:
-        db_table = 'teachers'
+        db_table = 'teacher'
 
     def __str__(self):
         return f'Teacher ID: {self.teacher_id}, Name: {self.teacher_name}'
+
+
+
 
 
 class Students(models.Model):

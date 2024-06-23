@@ -55,7 +55,18 @@ class DataBaseSetters:
             print("Module data inserted successfully.")
         except Exception as e:
             print(f"An error occurred: {e}")
-
+    def update_student_state(self ,student_id:int,seance_id:int,new_state:str):
+        try:
+            student_obj = Presence.objects.filter(seance__seance_id=seance_id,student__student_id=student_id)
+            if new_state=='Present':
+                student_obj.update(state=True)
+            else:
+                student_obj.update(state=False)
+            print("Student state updated successfully.")
+        except Presence.DoesNotExist as e :
+            print("Presence doesn't exist ")    
+        except Exception as e:
+            print(f"An error occurred: {e}")
     def set_student_state(self, student_id: int, seance_id: int, state: bool = False) -> None:
         try:
             student = Students.objects.get(pk=student_id)

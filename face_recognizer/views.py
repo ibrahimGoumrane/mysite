@@ -159,6 +159,19 @@ def face_recognizer(request: HttpRequest) -> HttpResponse:
 
 def result_submission(request):
     pass
-
+def updateStatus(request: HttpRequest) -> HttpResponse:
+    if request.method == 'PUT':
+        try:
+            data = loads(request.body)
+            for ele in data :
+                print(ele)
+                student_id = ele['studentId']
+                seance_id = ele['seanceId']
+                presence_status = ele['presenceStatus']
+                data_base_setters.update_student_state(student_id,seance_id,presence_status)
+            return JsonResponse({'status': 'ok'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    
 def student_info(request , student_id):
     return render(request, 'student_info.html')
