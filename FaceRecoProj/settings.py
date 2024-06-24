@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'compressor',
 ]
 
 MIDDLEWARE = [
@@ -136,6 +137,8 @@ USE_TZ = True
 
 STATIC_URL ='/FrontEnd/static/'
 STATICFILES_DIRS = [FRONT_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'static'  
+
 # Media files
 
 MEDIA_ROOT =  FRONT_DIR / 'media'
@@ -146,3 +149,14 @@ MEDIA_URL = '/FrontEnd/media/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+COMPRESS_ROOT = FRONT_DIR / 'static'
+
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+]

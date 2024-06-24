@@ -5,12 +5,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+
+    {% compress css %}
     <link rel="stylesheet" href="{% static 'css/build.css' %}" />
+    {% endcompress %}
   </head>
   <body>
-    Hello world
+    {% include 'UtilityTemplates/header.html' %}
+
     <img src="{% static 'img/newImage.png'  %}" alt="" />
 
-    <script src="../../node_modules/flowbite/dist/flowbite.min.js></script>
+    {% include 'UtilityTemplates/footer.html' %} {% compress js %}
+    <script src="../../node_modules/flowbite/dist/flowbite.min.js"></script>
+    {% endcompress %}
   </body>
 </html>
