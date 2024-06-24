@@ -561,3 +561,12 @@ video {
 .block {
   display: block;
 }
+
+.border-2 {
+  border-width: 2px;
+}
+
+.border-sky-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(14 165 233 / var(--tw-border-opacity));
+}

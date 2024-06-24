@@ -4,7 +4,7 @@
   "main": "tailwind.config.js",
   "description": "Face Recognition Project with Django\r This project aims to demonstrate face recognition functionality using Django, a high-level Python web framework. The application allows users to upload images and perform face recognition on those images.",
   "scripts": {
-    "tailwind": "npx tailwindcss -i ./FrontEnd/css/input.css -o ./FrontEnd/media/css/build.css --watch"
+    "tailwind": "npx tailwindcss -i ./FrontEnd/css/input.css -o ./FrontEnd/static/css/build.css --watch"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "eslint-config-prettier": "^9.1.0",
+    "flowbite": "^2.3.0",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5"
   }
