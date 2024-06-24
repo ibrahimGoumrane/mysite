@@ -1,6 +1,6 @@
 from FaceRecoApp.models import Class, Teachers, Students, Module, Seance, Presence
 from datetime import datetime
-from FaceRecoApp.utils import utils
+from FaceRecoApp.DetectorMain.utils import utils
 
 class DataBaseSetters:
     #  if you want to create a new Students object and associate it with a Class object 

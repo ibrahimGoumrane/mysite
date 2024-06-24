@@ -3,62 +3,39 @@ import face_recognition
 import pickle
 from collections import Counter
 import numpy as np
-from PIL import Image, ImageDraw
 import os
-DEFAULT_ENCODINGS_PATH = Path("output")
-BOUNDING_BOX_COLOR = "blue"
-DEFAULT_TRAINING_PATH=Path('training')
-TEXT_COLOR = "white"
-Path('training').mkdir(exist_ok=True)
-Path("output").mkdir(exist_ok=True)
-Path("validation").mkdir(exist_ok=True)
+
+
+DEFAULT_ENCODINGS_PATH = Path("FaceRecoAlgo/output")
+DEFAULT_TRAINING_PATH=Path('FaceRecoAlgo/training')
+DEFAULT_VALIDATION_PATH=Path('FaceRecoAlgo/validation')
+
+
+
+DEFAULT_TRAINING_PATH.mkdir(exist_ok=True)
+DEFAULT_ENCODINGS_PATH.mkdir(exist_ok=True)
+DEFAULT_VALIDATION_PATH.mkdir(exist_ok=True)
 
 class imageException(Exception):
     def __init__(self, errorImage) -> None:
         super(imageException,self).__init__(errorImage)
+
+
 class FaceRecognitionHandler:
     def __init__(self, encodings_location=DEFAULT_ENCODINGS_PATH):
         self.encodings_location = encodings_location
 
-    def save_encodings(self,encodings_location ,name_encodings):
-        if not name_encodings['names']:
-            return
-        with Path(encodings_location[0]).joinpath(f"{encodings_location[1]}.pkl").open(mode="wb") as f:
-            pickle.dump({'names':[encodings_location[1]], 'encodings': name_encodings['encodings']}, f)
-
-    def handle_encodings(self, encoding_loc, show_file_error=True):
-        old_encodings = self.load_encoded_faces(encoding_loc, show_file_error == True)
-        if old_encodings:
-            return old_encodings
-        return {'names': [], 'encodings': []}
-
-    def load_encoded_faces(self, encoding_loc, show_file_error=True):
-        try:
-            with Path(encoding_loc[0]).joinpath(f"{encoding_loc[1]}.pkl").open(mode="rb") as f:
-                loaded_encodings = pickle.load(f)
-        except OSError as e:
-            if show_file_error:
-                print(f"An IOError occurred: {e}")
-            return {'names': [], 'encodings': []}
-        return loaded_encodings
-    def encoding_location(self,filepath:Path):
-        heirarcy_list=filepath.parent.name.split('_')
-        file_name='_'.join(filepath.parent.name.split('_')[-2:]) + '_encodings'
-        cycle_directory=heirarcy_list[0]
-        cycle_year_directory=heirarcy_list[1]
-        section=heirarcy_list[2]
-        return "{}/{}/{}/{}".format(DEFAULT_ENCODINGS_PATH,cycle_directory,cycle_year_directory,section) ,file_name
     def encode_known_faces(self, model="CNN"):
-        for filepath in Path("training").glob("*/*"):
+        for filepath in DEFAULT_TRAINING_PATH.glob("*/*"):
             #creating the heirarchy
-            encoding_loc=self.encoding_location(filepath)
+            encoding_loc=self.__encoding_location(filepath)
             print(encoding_loc)
             if not os.path.exists(encoding_loc[0]): 
                 # if the demo_folder directory is not present  
                 # then create it. 
                 os.makedirs(encoding_loc[0])    
             image = face_recognition.load_image_file(filepath)
-            face_encodings_old = self.handle_encodings(encoding_loc, show_file_error=False)
+            face_encodings_old = self.__handle_encodings(encoding_loc, show_file_error=False)
             face_locations = face_recognition.face_locations(image, model=model)
             face_encodings = face_recognition.face_encodings(image, face_locations)
             if face_encodings_old['encodings']:
@@ -70,7 +47,7 @@ class FaceRecognitionHandler:
 
             # Saving the encodings
             name_encodings = {"names": encoding_loc[1], "encodings": face_encodings}
-            self.save_encodings(encoding_loc ,name_encodings)
+            self.__save_encodings(encoding_loc ,name_encodings)
 
 
     def recognize_faces(self,cycle,cycle_year,section,image_location, model="CNN"):
@@ -86,24 +63,21 @@ class FaceRecognitionHandler:
         search_place="{}/{}/{}/{}".format(DEFAULT_ENCODINGS_PATH,cycle,cycle_year,section) 
         for files in Path(search_place).glob('*_encodings.pkl'):
             file_location = files.stem
-            loaded_encodings = self.load_encoded_faces([search_place , file_location])
+            loaded_encodings = self.__load_encoded_faces([search_place , file_location])
             if not loaded_encodings['encodings']:
                 continue  # Skip if there are no encodings
 
             # for bounding_box, unknown_encoding in zip(input_face_locations, input_face_encodings):
             for bounding_box, unknown_encoding in zip(input_face_locations, input_face_encodings):
-                searched_name = self._recognize_face(unknown_encoding, loaded_encodings)
+                searched_name = self.__recognize_face(unknown_encoding, loaded_encodings)
                 if searched_name:
                     print(searched_name)
                     present_people.append(searched_name)
                     break
-        # del draw
-        # pillow_image.show()
         return present_people
 
 
-    @staticmethod
-    def _recognize_face(unknown_encoding, reference_encoding):
+    def __recognize_face(self,unknown_encoding, reference_encoding):
         boolean_matches = face_recognition.compare_faces(reference_encoding['encodings'], unknown_encoding)
         votes = Counter(
             name
@@ -114,39 +88,46 @@ class FaceRecognitionHandler:
             name = votes.most_common(1)[0][0]
             ele_len = name.rfind('_encodings')
             return name[:ele_len]
-    
-    def _display_face(self ,draw :ImageDraw, bounding_box :tuple[list], name:str):
-        top, right, bottom, left = bounding_box
-        draw.rectangle(((left, top), (right, bottom)), outline=BOUNDING_BOX_COLOR)
-        text_left, text_top, text_right, text_bottom = draw.textbbox(
-            (left, bottom), name
-        )
-        draw.rectangle(
-            ((text_left, text_top), (text_right, text_bottom)),
-            fill="blue",
-            outline="blue",
-        )
-        draw.text(
-            (text_left, text_top),
-            name,
-            fill="white",
-        )
+
+
+    def __save_encodings(self,encodings_location ,name_encodings):
+        if not name_encodings['names']:
+            return
+        with Path(encodings_location[0]).joinpath(f"{encodings_location[1]}.pkl").open(mode="wb") as f:
+            pickle.dump({'names':[encodings_location[1]], 'encodings': name_encodings['encodings']}, f)
+
+    def __handle_encodings(self, encoding_loc, show_file_error=True):
+        old_encodings = self.__load_encoded_faces(encoding_loc, show_file_error == True)
+        if old_encodings:
+            return old_encodings
+        return {'names': [], 'encodings': []}
+
+    def __load_encoded_faces(self, encoding_loc, show_file_error=True):
+        try:
+            with Path(encoding_loc[0]).joinpath(f"{encoding_loc[1]}.pkl").open(mode="rb") as f:
+                loaded_encodings = pickle.load(f)
+        except OSError as e:
+            if show_file_error:
+                print(f"An IOError occurred: {e}")
+            return {'names': [], 'encodings': []}
+        return loaded_encodings
+    def __encoding_location(self,filepath:Path):
+        heirarcy_list=filepath.parent.name.split('_')
+        file_name='_'.join(filepath.parent.name.split('_')[-2:]) + '_encodings'
+        cycle_directory=heirarcy_list[0]
+        cycle_year_directory=heirarcy_list[1]
+        section=heirarcy_list[2]
+        return "{}/{}/{}/{}".format(DEFAULT_ENCODINGS_PATH,cycle_directory,cycle_year_directory,section) ,file_name
 
 face_handler = FaceRecognitionHandler()
 
-# Uncomment and use one of the paths for testing
-# training_path = Path("validation/ben_afflek_1.jpg")
+
+
+
+# training_path = Path("FaceRecoAlgo/validation/mandy.jpg")
 # training_path = Path("validation/ben_afflek_2.jpg")
 # training_path = Path("./validation/elon.jpg")
 # face_handler.encode_known_faces()
-# import time
 
-# Your operation goes here
-# For example:
-# face_handler.recognize_faces('cp','2','c',training_path.absolute())
-# start_time = time.time()
-# face_handler.encode_known_faces()
-# end_time = time.time()
-# elapsed_time = end_time - start_time
-# print("Time taken:", elapsed_time, "seconds")
 
+# face_handler.recognize_faces('cp', '1', 'A', training_path)

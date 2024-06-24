@@ -1,8 +1,8 @@
-from datetime import datetime, timedelta,date
+from datetime import datetime
 import math
 from pathlib import Path
-from .forms import SeanceData
-from .models import UtilsData 
+from ..forms import SeanceData
+from ..models import UtilsData 
 from .detector import face_handler 
 class Utils :
     def set_current_time(self,date:datetime=datetime.now())->dict:

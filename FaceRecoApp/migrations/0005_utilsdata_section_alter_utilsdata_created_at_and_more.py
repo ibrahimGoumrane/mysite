@@ -3,7 +3,7 @@
 import FaceRecoApp.models
 from django.db import migrations, models
 
-import FaceRecoApp.utils
+import FaceRecoApp.DetectorMain.utils
 
 
 class Migration(migrations.Migration):

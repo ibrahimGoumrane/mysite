@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.http import JsonResponse,HttpResponse,HttpRequest,HttpResponsePermanentRedirect,HttpResponseNotFound,HttpResponseRedirect,HttpResponseServerError
-from pathlib import Path
-from .sgda_setters import data_base_setters
-from .sgda_getters import data_base_getters
+from .DataManip.sgda_setters import data_base_setters
+from .DataManip.sgda_getters import data_base_getters
 from .forms import ContactForm ,SeanceData
 from .models import Contact  ,UtilsData 
-from .utils import utils
+from .DetectorMain.utils import utils
 from json import dumps ,loads
-# Create your views here.
+
+
 
 
 def index(request):

@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_PRO = Path(__file__).resolve().parent
 BASE_DIR = BASE_PRO.parent
+FRONT_DIR = BASE_DIR / 'FrontEnd'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -66,7 +68,7 @@ ROOT_URLCONF = 'FaceRecoProj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_PRO, 'templates')],
+        'DIRS': [BASE_DIR / 'FrontEnd' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,9 +133,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'FaceRecoApp/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL='/media/'
+
+STATIC_URL ='/FrontEnd/static/'
+STATICFILES_DIRS = [FRONT_DIR / 'static']
+# Media files
+
+MEDIA_ROOT =  FRONT_DIR / 'media'
+MEDIA_URL = '/FrontEnd/media/'
 
 
 # Default primary key field type

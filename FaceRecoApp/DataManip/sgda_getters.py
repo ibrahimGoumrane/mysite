@@ -1,6 +1,6 @@
 from datetime import datetime ,date
-from FaceRecoApp.utils import utils
-from FaceRecoApp.models import Class, Teachers, Students, Module, Seance, Presence
+from ..DetectorMain.utils import utils
+from ..models import Class, Teachers, Students, Module, Seance, Presence
 from typing import Dict, List
 
 class Data_Base_extracters:
