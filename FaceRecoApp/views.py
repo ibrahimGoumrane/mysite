@@ -174,3 +174,9 @@ def updateStatus(request: HttpRequest) -> HttpResponse:
     
 def student_info(request , student_id):
     return render(request, 'student_info.html')
+
+
+def signup(request):
+    return render(request, 'SignUp-LogIn/signup.html')
+def login(request):
+    return render(request, 'SignUp-LogIn/login.html')

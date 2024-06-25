@@ -57,3 +57,7 @@
     - **Notification Settings**: Options to configure what types of notifications to receive and how (email, SMS, in-app).
 
 Would you like code snippets or further implementation details for any specific page?
+
+
+
+Dont forget to add like a calendar to the student profile page that contain the days that he was present and absent in .

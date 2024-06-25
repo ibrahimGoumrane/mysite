@@ -1,2 +1,26 @@
-{% extends 'UtilityTemplates/base.html'%}{% load static %} {% block content %}{%
-endblock %}
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/build.css' %}" />
+  </head>
+  <body class="relative">
+    <main class="min-h-screen w-screen">
+      <div class="mx-auto w-2/5 pt-10">Hello</div>
+    </main>
+    <div
+      id="bg-image "
+      class="fixed bottom-0 left-0 right-0 top-0 -z-10 h-screen w-screen bg-gray-950 opacity-50"
+    >
+      <img
+        src="{% static 'img/bg-transparent.png' %}"
+        alt="bg-img"
+        class="relative h-full w-full translate-x-20 object-cover"
+      />
+    </div>
+    <script src="{% static 'js/flowbite.min.js' %}"></script>
+  </body>
+</html>

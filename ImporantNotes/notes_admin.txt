@@ -15,3 +15,7 @@ admin admin
 LES DONNEE sont enregistrer de la maniere suivante dans la db :
 cycle_preparatoire - 1 2  - A_E
 cycle_ingenieur- 1 2 3 - IAGI_MSEI_GSI_GM_GE
+
+
+to alwyas build yu should collect the static files with this command :
+python manage.py collectstatic
