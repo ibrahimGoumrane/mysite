@@ -9,9 +9,125 @@
     <link rel="stylesheet" href="{% static 'css/build.css' %}" />
   </head>
   <body>
-    <div class="mx-auto w-3/5 pt-10">
-      {% include 'UtilityTemplates/header.html' %} {% block content %}
-      {%endblock%} {% include 'UtilityTemplates/footer.html' %}
+    <main>
+      <section class="bg-transparent">
+        <div
+          class="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0"
+        >
+          <a
+            href="#"
+            class="mb-6 flex items-center text-2xl font-semibold text-white"
+          >
+            <img
+              class="mr-2 h-8 w-8 rounded-full"
+              src="{% static 'img/MainLogo.jpg' %}"
+              alt="logo"
+            />
+            Flowbite
+          </a>
+          <div
+            class="w-full rounded-lg bg-white shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0"
+          >
+            <div class="space-y-4 p-6 sm:p-8 md:space-y-6">
+              <h1
+                class="text-xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl"
+              >
+                Sign in to your account
+              </h1>
+              <form class="space-y-4 md:space-y-6" action="#">
+                <div>
+                  <label
+                    for="email"
+                    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Your email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-gray-400 focus:outline-none focus:ring focus:ring-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                    placeholder="name@ensam-casa.ma"
+                    required=""
+                  />
+                </div>
+                <div>
+                  <label
+                    for="password"
+                    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="••••••••"
+                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-gray-400 focus:outline-none focus:ring focus:ring-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                    required=""
+                  />
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-start">
+                    <div class="flex h-5 items-center">
+                      <input
+                        id="remember"
+                        aria-describedby="remember"
+                        type="checkbox"
+                        class="focus:ring-3 h-4 w-4 rounded border border-gray-300 bg-gray-50 focus:ring-gray-700 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-gray-600"
+                        required=""
+                      />
+                    </div>
+                    <div class="ml-3 text-sm">
+                      <label
+                        for="remember"
+                        class="text-gray-500 dark:text-gray-300"
+                      >
+                        Remember me
+                      </label>
+                    </div>
+                  </div>
+                  <a
+                    href="#"
+                    class="text-sm font-medium text-black underline-offset-1 hover:underline dark:text-gray-500"
+                  >
+                    Forgot password?
+                  </a>
+                </div>
+                <button
+                  type="submit"
+                  class="w-full rounded-lg bg-gray-800 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-black focus:outline-none focus:ring-4 focus:ring-gray-500 dark:bg-gray-700 dark:hover:bg-black dark:focus:ring-gray-400"
+                >
+                  Sign in
+                </button>
+                <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                  Don’t have an account yet?
+                  <a
+                    href="#"
+                    class="text-sm font-medium text-black underline-offset-1 hover:underline dark:text-gray-500"
+                  >
+                    Sign up
+                  </a>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div
+      class="fixed bottom-0 left-0 right-0 top-0 -z-10 flex items-center justify-center bg-black"
+    >
+      <img
+        src="{% static 'img/bg-transparent.png' %}"
+        alt="bg-img"
+        class="w-full translate-x-40 self-end object-cover"
+      />
+      <img
+        src="{% static 'img/bg-transparent.png' %}"
+        alt="bg-img"
+        class="w-full -translate-x-40 self-start object-cover"
+      />
     </div>
     <script src="{% static 'js/flowbite.min.js' %}"></script>
   </body>
